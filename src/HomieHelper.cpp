@@ -3,8 +3,7 @@
 
 #include <algorithm>
 
-#include <ArduinoIostream.hpp>
-#include <FileIOUtils.hpp>
+#include "Utils/FileIOUtils.hpp"
 
 namespace Rovi {
     namespace Homie {
@@ -16,7 +15,7 @@ namespace Rovi {
                 m_id = id;
             } else {
                 // TODO?
-                Serial << "ERROR: Not a valid topic ID! (id=" << id << ")" << endl;
+                std::cout << "ERROR: Not a valid topic ID! (id=" << id << ")" << std::endl;
             }
         }
 

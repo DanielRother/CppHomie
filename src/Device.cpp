@@ -3,8 +3,7 @@
 #include <utility>
 #include <algorithm>
 
-#include <ArduinoIostream.hpp>
-#include <FileIOUtils.hpp>
+#include "Utils/FileIOUtils.hpp"
 
 #include "HomieHelper.h"
 
@@ -57,7 +56,7 @@ namespace Rovi {
 
 
         void Device::addNode(const std::shared_ptr<Node>& node) {
-            Serial << "Adding node " << node->value(Node::Attributes::name) << " to device " << m_name << endl;
+            std::cout << "Adding node " << node->value(Node::Attributes::name) << " to device " << m_name << std::endl;
 
             // TODO: Check, if node is already connected/ID existing
             m_nodes[node->value(Node::Attributes::nodeID)] = node;
@@ -320,7 +319,7 @@ namespace Rovi {
             for(auto& stat : stats) {
                 auto statTopic = topic(stat);
                 if(statTopic.size() != 1) {
-                    Serial << "WARNING: statTopic.size() != 1" << endl;
+                    std::cout << "WARNING: statTopic.size() != 1" << std::endl;
                 }
                 str += statTopic.front() + ",";
             }
@@ -349,7 +348,7 @@ namespace Rovi {
         void printMqttMessages(const std::vector<AttributeType>& attributes) {
             for(auto& attribute : attributes) {
                 auto path = mqttPathToString(attribute.first);
-                Serial << path << " -> " << attribute.second << endl;
+                std::cout << path << " -> " << attribute.second << std::endl;
             }
         }
     }

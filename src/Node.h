@@ -1,8 +1,6 @@
 #ifndef __HOMIE_NODE_H__
 #define __HOMIE_NODE_H__
 
-#include <Arduino.h>
-
 #include <string>
 #include <stdint.h>
 

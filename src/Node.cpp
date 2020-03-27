@@ -1,7 +1,6 @@
 #include "Node.h"
 
-#include <FileIOUtils.hpp>
-#include <ArduinoIostream.hpp>
+#include "Utils/FileIOUtils.hpp"
 
 namespace Rovi {
     namespace Homie {
@@ -15,7 +14,7 @@ namespace Rovi {
 
 
         void Node::setDevice(const std::shared_ptr<Device> device) {
-            Serial << "Set device " << device->value(Device::Attributes::name) << " for node " << m_name << endl;
+            std::cout << "Set device " << device->value(Device::Attributes::name) << " for node " << m_name << std::endl;
             m_device = device;
             // TODO: Test adding
 

@@ -1,7 +1,6 @@
 #ifndef __HOMIE_DEVICE_H__
 #define __HOMIE_DEVICE_H__
 
-#include <Arduino.h>
 #include <string>
 #include <vector>
 #include <list>
