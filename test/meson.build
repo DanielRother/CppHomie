@@ -6,6 +6,7 @@ gmock_dep = gtest_proj.get_variable('gmock_dep')
 tests_src = [
     'test_Dummy.cpp',
     'test_Device.cpp',
+    'test_Node.cpp',
     'Utils/test_FileIOUtils.cpp',
 ]  
 e = executable(
