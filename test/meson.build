@@ -7,6 +7,7 @@ tests_src = [
     'test_Dummy.cpp',
     'test_Device.cpp',
     'test_Node.cpp',
+    'test_PayloadDataTypes.cpp',
     'Utils/test_FileIOUtils.cpp',
 ]  
 e = executable(
