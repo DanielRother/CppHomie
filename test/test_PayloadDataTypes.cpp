@@ -177,30 +177,30 @@ namespace Rovi {
             EXPECT_FALSE(value.validateValue(""));
             EXPECT_FALSE(value.validateValue(" "));
 
-            EXPECT_TRUE(Boolean{"true"} == Boolean{true});
-            EXPECT_TRUE(Boolean{"false"} == Boolean{false});
-            EXPECT_TRUE(Boolean{"true"} != Boolean{false});
-            EXPECT_TRUE(Boolean{"false"} != Boolean{true});
+            EXPECT_EQ(Boolean{"true"}, Boolean{true});
+            EXPECT_EQ(Boolean{"false"}, Boolean{false});
+            EXPECT_NE(Boolean{"true"}, Boolean{false});
+            EXPECT_NE(Boolean{"false"}, Boolean{true});
 
-            EXPECT_TRUE("true" == Boolean{true}.toString());
-            EXPECT_TRUE("false" == Boolean{false}.toString());
+            EXPECT_EQ("true", Boolean{true}.toString());
+            EXPECT_EQ("false", Boolean{false}.toString());
 
             auto successful = value.setValue("true");
             EXPECT_TRUE(successful);
-            EXPECT_TRUE(value.value() == true);
-            EXPECT_TRUE(value.toString() == "true");
+            EXPECT_EQ(value.value(), true);
+            EXPECT_EQ(value.toString(), "true");
             EXPECT_TRUE(value.isValid());
 
             successful = value.setValue("FALSE");
             EXPECT_FALSE(successful);
-            EXPECT_TRUE(value.value() == true);
-            EXPECT_TRUE(value.toString() == "true");
+            EXPECT_EQ(value.value(), true);           // still the old value
+            EXPECT_EQ(value.toString(), "true");
             EXPECT_TRUE(value.isValid());
 
             successful = value.setValue("false");
             EXPECT_TRUE(successful);
-            EXPECT_TRUE(value.value() == false);
-            EXPECT_TRUE(value.toString() == "false");
+            EXPECT_EQ(value.value(), false);
+            EXPECT_EQ(value.toString(), "false");
             EXPECT_TRUE(value.isValid());
         }
 
