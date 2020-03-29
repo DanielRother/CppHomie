@@ -35,7 +35,7 @@ namespace Rovi {
         }
 
         template<typename T>
-        static std::string toString(T value) {     //TODO: Andere Methoden haben keine '_'
+        static std::string toString(T value) {
             std::stringstream ss;
             ss << value;
             return ss.str();
