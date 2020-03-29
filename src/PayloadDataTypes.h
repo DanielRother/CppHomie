@@ -37,11 +37,15 @@ namespace Rovi {
                 return valueToString(m_value);
             }
 
-            // Only activate if T != std::string. Otherwise there would be two time the same method signbature
+            // Only activate if T != std::string. Otherwise there would be two time the same method signature
             template <typename = std::enable_if<std::is_same<T, std::string>::value == false>>
             bool setValue(const ValueType& value) {
                 auto convValue = valueToString(value);
                 return setValue(convValue);
+            }
+            template<typename T2 = std::enable_if<std::is_base_of<T, std::string>::value == true>>
+            bool setValue(const T2& payload) {
+                return setValue(payload.value());
             }
             bool setValue(const std::string& value) {
                 auto isValid = validate(value);
@@ -55,7 +59,14 @@ namespace Rovi {
             bool setValue(const char* value) {
                 return setValue(std::string{value});
             }
-
+            // Delete all other overloadins to avoid implicit conversions
+            // TODO: Find a better solution, current one deletes to much
+            // template <typename T2>
+            // bool setValue(T2 value) = delete;
+            // template <typename T2>
+            // bool setValue(T2 value) {
+            //     setValue(StringUtils::toString(value));
+            // }
 
             bool operator==(const PayloadDatatype<T>& rhs) const {
                 return value() == rhs.value();
@@ -111,12 +122,13 @@ namespace Rovi {
 
         class Integer : public PayloadDatatype<int64_t> {
         public:
-            Integer(const std::string& payload = "0") : PayloadDatatype() {
+            explicit Integer(const std::string& payload = "0") : PayloadDatatype() {
                 setValue(payload);
             }
-            Integer(const PayloadDatatype::ValueType& payload = 0) : PayloadDatatype() {
+            explicit Integer(const PayloadDatatype::ValueType& payload = 0) : PayloadDatatype() {
                 setValue(payload);
             }
+            
             virtual ~Integer(){};
 
             virtual bool validateValue(const std::string& value) const override {
@@ -125,6 +137,8 @@ namespace Rovi {
                 isValid &= StringUtils::checkStringForAllowedCharacters(value, std::string("01234567890-"));    // The payload may only contain whole numbers and the negation character “-”. No other characters including spaces (” “) are permitted
                 isValid &= !(value == "-");                     // A string with just a negation sign (“-”) is not a m_valid payload
                 isValid &= !(value == "");                      // An empty string (“”) is not a m_valid payload
+                isValid &= (value.find_last_of("-") == 0 || value.find_last_of("-") == std::string::npos);
+
                 return isValid;
             }
 
