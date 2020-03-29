@@ -3,7 +3,7 @@
 #include <utility>
 #include <algorithm>
 
-#include "Utils/FileIOUtils.h"
+#include "Utils/StringUtils.h"
 
 #include "HomieHelper.h"
 
@@ -180,7 +180,7 @@ namespace Rovi {
                     str = availableStatsToValue(m_availableStats);
                     break;                    
                 case Attributes::statsInterval_s:
-                    str = to_string(m_statsInterval.count());
+                    str = StringUtils::toString(m_statsInterval.count());
                     break;
                 default:
                     break;
@@ -233,25 +233,25 @@ namespace Rovi {
             switch (stat)
             {
                 case Stats::uptime:
-                    str = to_string(m_hwInfo->uptime().count());
+                    str = StringUtils::toString(m_hwInfo->uptime().count());
                     break;
                 case Stats::signal:
-                    str = to_string(m_hwInfo->signalStrength());
+                    str = StringUtils::toString(m_hwInfo->signalStrength());
                     break;
                 case Stats::cputemp:
-                    str = to_string(m_hwInfo->cpuTemperature());
+                    str = StringUtils::toString(m_hwInfo->cpuTemperature());
                     break;
                 case Stats::cpuload:
-                    str = to_string(m_hwInfo->cpuLoad());
+                    str = StringUtils::toString(m_hwInfo->cpuLoad());
                     break;
                 case Stats::battery:
-                    str = to_string(m_hwInfo->batteryLevel());
+                    str = StringUtils::toString(m_hwInfo->batteryLevel());
                     break;
                 case Stats::freeheap:
-                    str = to_string(m_hwInfo->freeheap());
+                    str = StringUtils::toString(m_hwInfo->freeheap());
                     break;
                 case Stats::supply:
-                    str = to_string(m_hwInfo->supplyVoltage());
+                    str = StringUtils::toString(m_hwInfo->supplyVoltage());
                     break;
                 default:
                     break;
@@ -262,7 +262,7 @@ namespace Rovi {
 
 
         std::string Device::nameToTopic(const std::string& topic) const {
-            auto convertedTopic = toLower(topic);
+            auto convertedTopic = StringUtils::toLower(topic);
             std::replace( convertedTopic.begin(), convertedTopic.end(), ' ', '-');
             return convertedTopic;
         }
@@ -270,7 +270,7 @@ namespace Rovi {
 
         std::string Device::macToTopic(const std::shared_ptr<HWInfo>& hwInfo) const {
             auto mac = hwInfo->mac();
-            auto convertedMac = toLower(mac);
+            auto convertedMac = StringUtils::toLower(mac);
             convertedMac.erase(std::remove(convertedMac.begin(), convertedMac.end(), ':'), convertedMac.end());
             return convertedMac;
         }

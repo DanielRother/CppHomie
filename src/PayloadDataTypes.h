@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <type_traits>
 
-#include "Utils/FileIOUtils.h"
+#include "Utils/StringUtils.h"
 // #include "Log.h"
 
 namespace Rovi {
@@ -122,7 +122,7 @@ namespace Rovi {
             virtual bool validateValue(const std::string& value) const override {
                 bool isValid = true;
                 // isValid &= rangeCheck();                     // TODO: Is this possible at this point? What is returned by atoll?
-                isValid &= checkStringForAllowedCharacters(value, std::string("01234567890-"));    // The payload may only contain whole numbers and the negation character “-”. No other characters including spaces (” “) are permitted
+                isValid &= StringUtils::checkStringForAllowedCharacters(value, std::string("01234567890-"));    // The payload may only contain whole numbers and the negation character “-”. No other characters including spaces (” “) are permitted
                 isValid &= !(value == "-");                     // A string with just a negation sign (“-”) is not a m_valid payload
                 isValid &= !(value == "");                      // An empty string (“”) is not a m_valid payload
                 return isValid;
@@ -134,7 +134,7 @@ namespace Rovi {
             }
 
             virtual std::string valueToString(const PayloadDatatype::ValueType& value) const override {
-                return to_string(value);
+                return StringUtils::toString(value);
             }       
         };
 
@@ -151,7 +151,7 @@ namespace Rovi {
             virtual bool validateValue(const std::string& value) const override {
                 bool isValid = true;
                 // isValid &= rangeCheck();                     // TODO: Is this possible at this point?
-                isValid &= checkStringForAllowedCharacters(value, std::string("01234567890-eE."));
+                isValid &= StringUtils::checkStringForAllowedCharacters(value, std::string("01234567890-eE."));
                 isValid &= std::count(value.begin(), value.end(), '.') <= 1;                    // The dot character (“.”) is the decimal separator (used if necessary) and may only have a single instance present in the payload
                 isValid &= !(value == "-");                    // A string with just a negation sign (“-”) is not a m_valid payload
                 isValid &= !(value == "");                      // An empty string (“”) is not a m_valid payload
@@ -164,8 +164,8 @@ namespace Rovi {
             }
 
             virtual std::string valueToString(const PayloadDatatype::ValueType& value) const override {
-                auto value_str = to_string(value);
-                return removeCharsFromString(value_str, "+");
+                auto value_str = StringUtils::toString(value);
+                return StringUtils::removeCharsFromString(value_str, "+");
             }       
         };
 
@@ -218,7 +218,7 @@ namespace Rovi {
             Enumeration(const std::set<std::string>& enumValues) : PayloadDatatype() {
                 for(auto& value : enumValues) {
                     // Remove whitespace
-                    m_enumValues.insert(trim(value));
+                    m_enumValues.insert(StringUtils::trim(value));
                 }
             }
             virtual ~Enumeration(){};
@@ -268,7 +268,7 @@ namespace Rovi {
                 // An empty string (“”) is not a m_valid payload
                 bool isValid = true;
                 isValid &= (value.size() > 0 && value.size() <= 11);  // max "100,100,100" -> 11 chars
-                isValid &= checkStringForAllowedCharacters(value, std::string("01234567890,"));
+                isValid &= StringUtils::checkStringForAllowedCharacters(value, std::string("01234567890,"));
                 isValid &= std::count(value.begin(), value.end(), ',') == 2;
                 
                 // Return if string already is invalid. Otherwise, convertion will fail...
@@ -300,12 +300,12 @@ namespace Rovi {
 
         protected:
            virtual PayloadDatatype::ValueType valueFromString(const std::string& payload) const override {
-                auto values = splitString(payload, ',');
+                auto values = StringUtils::splitString(payload, ',');
                 return PayloadDatatype::ValueType{atoll(values[0].c_str()), atoll(values[1].c_str()), atoll(values[2].c_str())};
             }
 
             virtual std::string valueToString(const PayloadDatatype::ValueType& value) const override {
-                return to_string(std::get<0>(value)) + "," + to_string(std::get<1>(value)) + "," + to_string(std::get<2>(value));
+                return StringUtils::toString(std::get<0>(value)) + "," + StringUtils::toString(std::get<1>(value)) + "," + StringUtils::toString(std::get<2>(value));
             }    
 
             ColorFormat format() const {

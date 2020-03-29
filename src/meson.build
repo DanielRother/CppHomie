@@ -3,7 +3,7 @@ homie_header = [
   'HomieHelper.h',
   'Node.h',
   'PayloadDataTypes.h',
-  'Utils/FileIOUtils.h',
+  'Utils/StringUtils.h',
 ]
 homie_src = [
   'Device.cpp',

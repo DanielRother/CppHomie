@@ -1,6 +1,6 @@
 #include "Node.h"
 
-#include "Utils/FileIOUtils.h"
+#include "Utils/StringUtils.h"
 
 namespace Rovi {
     namespace Homie {
@@ -80,7 +80,7 @@ namespace Rovi {
                 case Attributes::array:
                     str = "0";
                     if(isArray()) {
-                        str += "-" + to_string(m_arraySize - 1);
+                        str += "-" + StringUtils::toString(m_arraySize - 1);
                     }
                     break;                
                 default:
@@ -109,7 +109,7 @@ namespace Rovi {
         }
 
         std::string Node::nameToID(const std::string& topic) const {
-            auto convertedTopic = toLower(topic);
+            auto convertedTopic = StringUtils::toLower(topic);
             std::replace( convertedTopic.begin(), convertedTopic.end(), ' ', '-');
             return convertedTopic;
         }

@@ -8,7 +8,7 @@ tests_src = [
     'test_Device.cpp',
     'test_Node.cpp',
     'test_PayloadDataTypes.cpp',
-    'Utils/test_FileIOUtils.cpp',
+    'Utils/test_StringUtils.cpp',
 ]  
 e = executable(
   'testprog',

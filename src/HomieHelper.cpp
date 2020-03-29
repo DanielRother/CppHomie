@@ -3,7 +3,7 @@
 
 #include <algorithm>
 
-#include "Utils/FileIOUtils.h"
+#include "Utils/StringUtils.h"
 
 namespace Rovi {
     namespace Homie {
@@ -24,7 +24,7 @@ namespace Rovi {
         // A topic level ID MUST NOT start or end with a hyphen (-). The special character $ is used and reserved for Homie attributes. The underscore (_) is used and reserved for Homie node arrays.
         bool TopicID::isValid(const std::string id) const {
             auto isValid = bool{true};
-            isValid &= checkStringForAllowedCharacters(id, std::string("abcdefghijklmnopqrstuvwxyz-01234567890"));
+            isValid &= StringUtils::checkStringForAllowedCharacters(id, std::string("abcdefghijklmnopqrstuvwxyz-01234567890"));
             if(id.size() > 0) {
                 isValid &= (id.front() != '-');
                 isValid &= (id.back() != '-');
@@ -44,7 +44,7 @@ namespace Rovi {
 
 
         std::string Version::toString() const {
-            return to_string((uint32_t) m_major) + "." + to_string((uint32_t) m_minor) + "." + to_string((uint32_t) m_revision);
+            return StringUtils::toString((uint32_t) m_major) + "." + StringUtils::toString((uint32_t) m_minor) + "." + StringUtils::toString((uint32_t) m_revision);
         }
 
 
