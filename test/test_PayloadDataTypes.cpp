@@ -93,60 +93,66 @@ namespace Rovi {
             EXPECT_FALSE(value.validateValue("-.456.789"));
             EXPECT_TRUE(value.validateValue("2e8"));
             EXPECT_TRUE(value.validateValue("2E8"));
+            EXPECT_FALSE(value.validateValue("E8"));
+            EXPECT_FALSE(value.validateValue("-E8"));
             EXPECT_FALSE(value.validateValue("2f8"));
             EXPECT_FALSE(value.validateValue("NaN"));
+            EXPECT_FALSE(value.validateValue("nan"));
             EXPECT_FALSE(value.validateValue("Infinity"));
+            EXPECT_FALSE(value.validateValue("infinity"));
+            EXPECT_FALSE(value.validateValue("Inf"));
+            EXPECT_FALSE(value.validateValue("inf"));
             EXPECT_FALSE(value.validateValue("-"));
             EXPECT_FALSE(value.validateValue(""));
             EXPECT_FALSE(value.validateValue(" "));
 
-            EXPECT_TRUE(Float{"123"} == Float{123});
-            EXPECT_TRUE(Float{"123.456"} == Float{123.456});
-            EXPECT_TRUE(Float{"-123"} == Float{-123});
-            EXPECT_TRUE(Float{"-123.456"} == Float{-123.456});
-            EXPECT_TRUE(Float{".456"} == Float{.456});
-            EXPECT_TRUE(Float{"-.456"} == Float{-.456});
+            EXPECT_EQ(Float{"123"}, Float{123});
+            EXPECT_EQ(Float{"123.456"}, Float{123.456});
+            EXPECT_EQ(Float{"-123"}, Float{-123});
+            EXPECT_EQ(Float{"-123.456"}, Float{-123.456});
+            EXPECT_EQ(Float{".456"}, Float{.456});
+            EXPECT_EQ(Float{"-.456"}, Float{-.456});
 
-            EXPECT_TRUE(Float{"2e8"} == Float{2e8});
-            EXPECT_TRUE(Float{"2E8"} == Float{2E8});
-            EXPECT_TRUE(Float{"2E8"} == Float{2E+8});
-            EXPECT_TRUE(Float{"2E8"} == Float{2E+008});
-            EXPECT_TRUE(Float{"-2E8"} == Float{-2E8});
-            EXPECT_TRUE(Float{"2E-8"} == Float{2E-8});
-            EXPECT_TRUE(Float{"2E-8"} == Float{2E-008});
-            EXPECT_TRUE(Float{"-2E-8"} == Float{-2E-8});
-            EXPECT_TRUE(Float{"123"} != Float{456.789});
+            EXPECT_EQ(Float{"2e8"}, Float{2e8});
+            EXPECT_EQ(Float{"2E8"}, Float{2E8});
+            EXPECT_EQ(Float{"2E8"}, Float{2E+8});
+            EXPECT_EQ(Float{"2E8"}, Float{2E+008});
+            EXPECT_EQ(Float{"-2E8"}, Float{-2E8});
+            EXPECT_EQ(Float{"2E-8"}, Float{2E-8});
+            EXPECT_EQ(Float{"2E-8"}, Float{2E-008});
+            EXPECT_EQ(Float{"-2E-8"}, Float{-2E-8});
+            EXPECT_NE(Float{"123"}, Float{456.789});
 
-            EXPECT_TRUE("123" == Float{123}.toString());
-            EXPECT_TRUE("123.456" == Float{123.456}.toString());
-            EXPECT_TRUE("-123" == Float{-123}.toString());
-            EXPECT_TRUE("0.456" == Float{.456}.toString());
-            EXPECT_TRUE("-123.456" == Float{-123.456}.toString());
-            EXPECT_TRUE("-0.456" == Float{-.456}.toString());
-            EXPECT_TRUE("2e08" == Float{2E8}.toString());
-            EXPECT_TRUE("2e08" == Float{2E+8}.toString());
-            EXPECT_TRUE("2e08" == Float{2E+008}.toString());
-            EXPECT_TRUE("-2e08" == Float{-2E8}.toString());
-            EXPECT_TRUE("2e-08" == Float{2E-8}.toString());
-            EXPECT_TRUE("2e-08" == Float{2E-008}.toString());
-            EXPECT_TRUE("-2e-08" == Float{-2E-8}.toString());
+            EXPECT_EQ("123", Float{123}.toString());
+            EXPECT_EQ("123.456", Float{123.456}.toString());
+            EXPECT_EQ("-123", Float{-123}.toString());
+            EXPECT_EQ("0.456", Float{.456}.toString());
+            EXPECT_EQ("-123.456", Float{-123.456}.toString());
+            EXPECT_EQ("-0.456", Float{-.456}.toString());
+            EXPECT_EQ("2e08", Float{2E8}.toString());
+            EXPECT_EQ("2e08", Float{2E+8}.toString());
+            EXPECT_EQ("2e08", Float{2E+008}.toString());
+            EXPECT_EQ("-2e08", Float{-2E8}.toString());
+            EXPECT_EQ("2e-08", Float{2E-8}.toString());
+            EXPECT_EQ("2e-08", Float{2E-008}.toString());
+            EXPECT_EQ("-2e-08", Float{-2E-8}.toString());
 
             auto successful = value.setValue("123");
             EXPECT_TRUE(successful);
-            EXPECT_TRUE(value.value() == 123.0f);
-            EXPECT_TRUE(value.toString() == "123");
+            EXPECT_EQ(value.value(), 123.0f);
+            EXPECT_EQ(value.toString(), "123");
             EXPECT_TRUE(value.isValid());
 
-            successful = value.setValue("123.456.789");
+            successful = value.setValue("456.789.123");
             EXPECT_FALSE(successful);
-            EXPECT_TRUE(value.value() == 123.0f);
-            EXPECT_TRUE(value.toString() == "123");
+            EXPECT_EQ(value.value(), 123.0f);           // still the old value
+            EXPECT_EQ(value.toString(), "123");
             EXPECT_TRUE(value.isValid());
 
             successful = value.setValue(".567");
             EXPECT_TRUE(successful);
-            EXPECT_TRUE(value.value() - .567f < 0.001f);
-            EXPECT_TRUE(value.toString() == "0.567");
+            EXPECT_NEAR(value.value(), .567f, 0.001f);
+            EXPECT_EQ(value.toString(), "0.567");
             EXPECT_TRUE(value.isValid());
         }
 

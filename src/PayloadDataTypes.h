@@ -169,6 +169,9 @@ namespace Rovi {
                 isValid &= std::count(value.begin(), value.end(), '.') <= 1;                    // The dot character (“.”) is the decimal separator (used if necessary) and may only have a single instance present in the payload
                 isValid &= !(value == "-");                    // A string with just a negation sign (“-”) is not a m_valid payload
                 isValid &= !(value == "");                      // An empty string (“”) is not a m_valid payload
+                isValid &= !(value.find_last_of("E") == 0 || value.find_last_of("e") == 0 ||
+                            (value.find_last_of("-") ==  0 && (value.find_last_of("E") == 1 || value.find_last_of("e") == 1)));
+
                 return isValid;
             }
 
