@@ -227,20 +227,20 @@ namespace Rovi {
 
             auto successful = value.setValue("Red");
             EXPECT_TRUE(successful);
-            EXPECT_TRUE(value.value() == "Red");
-            EXPECT_TRUE(value.toString() == "Red");
+            EXPECT_EQ(value.value(), "Red");
+            EXPECT_EQ(value.toString(), "Red");
             EXPECT_TRUE(value.isValid());
            
             successful = value.setValue("black");
             EXPECT_FALSE(successful);
-            EXPECT_TRUE(value.value() == "Red");
-            EXPECT_TRUE(value.toString() == "Red");
+            EXPECT_EQ(value.value(), "Red");                // still the old value
+            EXPECT_EQ(value.toString(), "Red");
             EXPECT_TRUE(value.isValid());
 
             successful = value.setValue("blue and green");
             EXPECT_TRUE(successful);
-            EXPECT_TRUE(value.value() == "blue and green");
-            EXPECT_TRUE(value.toString() == "blue and green");
+            EXPECT_EQ(value.value(), "blue and green");
+            EXPECT_EQ(value.toString(), "blue and green");
             EXPECT_TRUE(value.isValid());
         }
 
@@ -256,12 +256,10 @@ namespace Rovi {
             EXPECT_TRUE(value.validateValue("1,1,1"));
             EXPECT_TRUE(value.validateValue("255,255,255"));
             EXPECT_FALSE(value.validateValue(""));
+            EXPECT_FALSE(value.validateValue(" "));
             EXPECT_FALSE(value.validateValue("0, 0, 0"));
-            // EXPECT_FALSE(value.validateValue("0,,0"));        // <- Is handled as 0,0,0. Not sure if I should really dismiss this value
-                                                                // Next test case to ensure this behaviour
-            auto a = Color{ColorFormat::RGB, "1,,3"};
-            auto b = Color{ColorFormat::RGB, ColorTuple{1,0,3}};
-            EXPECT_TRUE(a == b);
+            EXPECT_FALSE(value.validateValue("0,,0"));
+            EXPECT_FALSE(value.validateValue("0, ,0")); 
             EXPECT_FALSE(value.validateValue("0,0,0,"));
             EXPECT_FALSE(value.validateValue("0.0.0"));
             EXPECT_FALSE(value.validateValue("0.2,0.3,4.5"));
@@ -272,35 +270,36 @@ namespace Rovi {
             EXPECT_FALSE(value.validateValue("0,256,0"));
             EXPECT_FALSE(value.validateValue("0,0,256"));
 
+            auto a = Color{ColorFormat::RGB, ColorTuple{1,0,3}};
             auto c = Color{ColorFormat::RGB, ColorTuple(4,5,6)};
-            EXPECT_TRUE(a != c);
+            EXPECT_NE(a, c);
 
             {
                 auto d = Color{ColorFormat::RGB, ColorTuple(1,2,3)};
-                EXPECT_TRUE("1,2,3" == d.toString());
+                EXPECT_EQ("1,2,3", d.toString());
             }
             {
-                auto d = Color{ColorFormat::RGB, "1,,4"};
-                EXPECT_TRUE("1,0,4" == d.toString());
+                auto d = Color{ColorFormat::RGB, "1,0,4"};
+                EXPECT_EQ("1,0,4", d.toString());
             }
 
             {   
                 auto successful = value.setValue("67,78,112");
                 EXPECT_TRUE(successful);
-                EXPECT_TRUE(value.value() == ColorTuple(67,78,112));
-                EXPECT_TRUE(value.toString() == "67,78,112");
+                EXPECT_EQ(value.value(), ColorTuple(67,78,112));
+                EXPECT_EQ(value.toString(), "67,78,112");
                 EXPECT_TRUE(value.isValid());
 
                 successful = value.setValue("300,78,112");
                 EXPECT_FALSE(successful);
-                EXPECT_TRUE(value.value() == ColorTuple(67,78,112));
-                EXPECT_TRUE(value.toString() == "67,78,112");
+                EXPECT_EQ(value.value(), ColorTuple(67,78,112));        // still the old value
+                EXPECT_EQ(value.toString(), "67,78,112");
                 EXPECT_TRUE(value.isValid());
 
                 successful = value.setValue("67,100,112");
                 EXPECT_TRUE(successful);
-                EXPECT_TRUE(value.value() == ColorTuple(67,100,112));
-                EXPECT_TRUE(value.toString() == "67,100,112");
+                EXPECT_EQ(value.value(), ColorTuple(67,100,112));
+                EXPECT_EQ(value.toString(), "67,100,112");
                 EXPECT_TRUE(value.isValid());
             }
         }
@@ -317,12 +316,10 @@ namespace Rovi {
             EXPECT_TRUE(value.validateValue("1,1,1"));
             EXPECT_TRUE(value.validateValue("360,100,100"));
             EXPECT_FALSE(value.validateValue(""));
+            EXPECT_FALSE(value.validateValue(" "));
             EXPECT_FALSE(value.validateValue("0, 0, 0"));
-            // EXPECT_FALSE(value.validateValue("0,,0"));        // <- Is handled as 0,0,0. Not sure if I should really dismiss this value
-                                                                // Next test case to ensure this behaviour
-            auto a = Color{ColorFormat::HSV, "1,,3"};
-            auto b = Color{ColorFormat::HSV, ColorTuple{1,0,3}};
-            EXPECT_TRUE(a == b);
+            EXPECT_FALSE(value.validateValue("0,,0"));
+            EXPECT_FALSE(value.validateValue("0, ,0"));
             EXPECT_FALSE(value.validateValue("0,0,0,"));
             EXPECT_FALSE(value.validateValue("0.0.0"));
             EXPECT_FALSE(value.validateValue("0.2,0.3,4.5"));
@@ -333,35 +330,36 @@ namespace Rovi {
             EXPECT_FALSE(value.validateValue("0,101,0"));
             EXPECT_FALSE(value.validateValue("0,0,101"));
 
+            auto a = Color{ColorFormat::HSV, "1,0,3"};
             auto c = Color{ColorFormat::HSV, ColorTuple(4,5,6)};
-            EXPECT_TRUE(a != c);
+            EXPECT_NE(a, c);
 
             {
                 auto d = Color{ColorFormat::HSV, ColorTuple(1,2,3)};
-                EXPECT_TRUE("1,2,3" == d.toString());
+                EXPECT_EQ("1,2,3", d.toString());
             }
             {
-                auto d = Color{ColorFormat::HSV, "1,,4"};
-                EXPECT_TRUE("1,0,4" == d.toString());
+                auto d = Color{ColorFormat::HSV, "1,0,4"};
+                EXPECT_EQ("1,0,4", d.toString());
             }
 
             {   
                 auto successful = value.setValue("67,78,55");
                 EXPECT_TRUE(successful);
-                EXPECT_TRUE(value.value() == ColorTuple(67,78,55));
-                EXPECT_TRUE(value.toString() == "67,78,55");
+                EXPECT_EQ(value.value(), ColorTuple(67,78,55));
+                EXPECT_EQ(value.toString(), "67,78,55");
                 EXPECT_TRUE(value.isValid());
 
                 successful = value.setValue("300,78,112");
                 EXPECT_FALSE(successful);
-                EXPECT_TRUE(value.value() == ColorTuple(67,78,55));
-                EXPECT_TRUE(value.toString() == "67,78,55");
+                EXPECT_EQ(value.value(), ColorTuple(67,78,55));         // still the old value
+                EXPECT_EQ(value.toString(), "67,78,55");
                 EXPECT_TRUE(value.isValid());
 
                 successful = value.setValue("67,100,55");
                 EXPECT_TRUE(successful);
-                EXPECT_TRUE(value.value() == ColorTuple(67,100,55));
-                EXPECT_TRUE(value.toString() == "67,100,55");
+                EXPECT_EQ(value.value(), ColorTuple(67,100,55));
+                EXPECT_EQ(value.toString(), "67,100,55");
                 EXPECT_TRUE(value.isValid());
             }
         }

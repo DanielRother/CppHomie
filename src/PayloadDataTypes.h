@@ -287,6 +287,11 @@ namespace Rovi {
                 isValid &= (value.size() > 0 && value.size() <= 11);  // max "100,100,100" -> 11 chars
                 isValid &= StringUtils::checkStringForAllowedCharacters(value, std::string("01234567890,"));
                 isValid &= std::count(value.begin(), value.end(), ',') == 2;
+                isValid &= value.size() >= 5; // e.g. '1,2,3'
+                auto values = StringUtils::splitString(value, ',');
+                for(auto v : values) {
+                    isValid &= StringUtils::checkStringForAllowedCharacters(v, std::string("01234567890,"));
+                }
                 
                 // Return if string already is invalid. Otherwise, convertion will fail...
                 if(!isValid) {
